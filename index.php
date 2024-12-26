@@ -20,7 +20,7 @@
             <li><a class="hover:text-[#EB3223] transition-all duration-300" href="#bestTrips">activities</a></li>
             <li><a class="hover:text-[#EB3223] transition-all duration-300" href="#about">About</a></li>
             <li><a class="hover:text-[#EB3223] transition-all duration-300" href="#contact">Contact</a></li>
-            <li class="ml-8 max-lg:ml-0"><a class="sign w-[150px] h-[45px] flex justify-center items-center rounded-[5px] text-white" href="#">Sign up</a></li>
+            <li class="ml-8 max-lg:ml-0"><a class="sign w-[150px] h-[45px] flex justify-center items-center rounded-[5px] text-white" href="login/signup.php">Sign up</a></li>
         </ul>
     </header>
 
