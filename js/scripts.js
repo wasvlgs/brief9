@@ -77,7 +77,13 @@ function checkSignUp(){
         getPassword.style.border = "1px solid #d1d5db";
         getConfirmpassword.style.border = "1px solid #d1d5db";
 
-        if (!address.test(getAddress.value)) {
+        if (!name.test(getFName.value)) {
+            event.preventDefault();
+            getFName.style.border = "2px solid red";
+        } else if (!name.test(getLName.value)) {
+            event.preventDefault();
+            getLName.style.border = "2px solid red";
+        } else if (!address.test(getAddress.value)) {
             event.preventDefault();
             getAddress.style.border = "2px solid red";
         } else if (!phone.test(getPhone.value)) {

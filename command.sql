@@ -10,3 +10,11 @@ ALTER TABLE `activite` ADD `type` ENUM('flight','hotel','circuit') NOT NULL AFTE
 ALTER TABLE `reservation` ADD `totalPrice` DECIMAL(10,2) NOT NULL AFTER `statut`;
 
 ALTER TABLE `reservation` ADD `customization` JSON NOT NULL AFTER `totalPrice`;
+
+INSERT INTO client (nom, prenom, email, password, role, status) VALUES ('yazza', 'wassim', 'wassim@gmail.com', '$2y$10$C8c/tLqSZz4ZfEWJMdg4QueD/RfKeZU1ahBpBvTSxlLbdPsJN/zGG', 'sAdmin', 'active');
+
+
+INSERT INTO client (nom, prenom, email, password, role, status) VALUES ('marzouk', 'yacine', 'yacine@gmail.com', '$2y$10$C8c/tLqSZz4ZfEWJMdg4QueD/RfKeZU1ahBpBvTSxlLbdPsJN/zGG', 'admin', 'active');
+
+
+INSERT INTO client (nom, prenom, email, password, role, status) VALUES ('mahrouch', 'walid', 'walid@gmail.com', '$2y$10$C8c/tLqSZz4ZfEWJMdg4QueD/RfKeZU1ahBpBvTSxlLbdPsJN/zGG', 'client', 'active');

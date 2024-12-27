@@ -166,11 +166,31 @@
 
     ?>
 
-    <script src="../js/script.js"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded",()=>{
-    checkSignIn();
-})
+
+        const email = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        const password = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+        document.querySelector("#formSignIn").addEventListener("submit",(event)=>{
+
+        const formElements = event.target.elements;
+
+        let getEmail = formElements['email'];
+        let getPassword = formElements['password'];
+
+
+        getEmail.style.border = "1px solid #d1d5db";
+        getPassword.style.border = "1px solid #d1d5db";
+
+        if(!email.test(getEmail.value)){
+            event.preventDefault();
+            getEmail.style.border = "2px solid red";
+        }else if(!password.test(getPassword.value)){
+            event.preventDefault();
+            getPassword.style.border = "2px solid red";
+        }
+    })
     </script>
 </body>
 </html>
