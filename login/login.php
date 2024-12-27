@@ -107,28 +107,27 @@
 
 
         if($cnx){
-            $sql = $cnx->prepare("SELECT * FROM users INNER JOIN role ON users.type = role.ID_role WHERE email = ?");
-            $sql->bind_param("s",$getEmail);
+            $sql = $cnx->prepare("SELECT * FROM client WHERE email = :email");
+            $sql->bindParam("email",$getEmail);
             if($sql->execute()){
-                $result = $sql->get_result();
-                $user = $result->fetch_assoc();
-                if($result->num_rows === 1 && password_verify($getPassword, $user['password'])){
+                $user = $sql->fetch(PDO::FETCH_ASSOC);
+                if($sql->rowCount() === 1 && password_verify($getPassword, $user['password'])){
 
                     session_start();
-                    if($user['titre'] == "admin"){
+                    if($user['role'] == "admin" || $user['role'] == "sAdmin"){
                         $_SESSION['id'] = $user['ID_user'];
                         echo '<script>document.getElementById("success").style.display = "flex";
                         setTimeout(()=>{
                         document.getElementById("success").style.display = "none";
-                        location.replace("../admin/dashboard.php");
+                        location.replace("../admin/addActivities.php");
                             },1000)
                         </script>';
-                    }else if($user['titre'] == "client"){
+                    }else if($user['role'] == "client"){
                         $_SESSION['id'] = $user['ID_user'];
                         echo '<script>document.getElementById("success").style.display = "flex";
                         setTimeout(()=>{
                         document.getElementById("success").style.display = "none";
-                        location.replace("../pages/menu.php");
+                        location.replace("../pages/activities.php");
                             },1000)
                         </script>';
                     }else{

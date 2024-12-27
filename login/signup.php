@@ -2,7 +2,7 @@
 
 
 
-    require '../database.php';
+    require_once '../database.php';
 
 
 
@@ -49,14 +49,7 @@
                     <label for="last-name" class="block text-sm font-medium text-gray-700">Last Name</label>
                     <input type="text" id="last-name" name="lastname" placeholder="Enter your last name"  class="mt-1 w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-textSpecial" />
                 </div>
-                <div>
-                    <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
-                    <input type="text" id="address" name="address" placeholder="Enter your address"  class="mt-1 w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-textSpecial" />
-                </div>
-                <div>
-                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number"  class="mt-1 w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-textSpecial" />
-                </div>
+                
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
                     <input type="email" id="email" name="email" placeholder="Enter your email"  class="mt-1 w-full py-3 px-4 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-textSpecial" />
@@ -89,8 +82,6 @@
                 if(isset($_POST['submit'])){
                     $FName = htmlspecialchars($_POST['firstname']);
                     $LName = htmlspecialchars($_POST['lastname']);
-                    $adresse = htmlspecialchars($_POST['address']);
-                    $phone = htmlspecialchars($_POST['phone']);
                     $email = htmlspecialchars($_POST['email']);
                     $password = htmlspecialchars($_POST['password']);
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -99,29 +90,33 @@
                         $checkEmail = $cnx->prepare("SELECT * FROM client");
                         $answer = true;
                         if($checkEmail->execute()){
-                            $result = $checkEmail->get_result();
-                            foreach($result as $user){
+                            
+                            foreach($checkEmail as $user){
+
                                 if($user['email'] == $email){
                                     $answer = false;
                                 }
                             }
                             if($answer === true){
-                                $sql = $cnx->prepare("INSERT INTO client(nom,prenom,email,password,Adresse,num,type) VALUES(?, ?, ?, ?, ?, ?, 2)");
-                                $sql->bind_param("sssssi", $FName, $LName, $email, $hashedPassword, $adresse, $phone);
+                                $sql = $cnx->prepare("INSERT INTO client(nom,prenom,email,password,role,status) VALUES(:fname, :lname, :email, :pass, 'client', 'active')");
+
+                                $sql->bindParam(':fname', $FName);
+                                $sql->bindParam(':lname', $LName);
+                                $sql->bindParam(':email', $email);
+                                $sql->bindParam(':pass', $hashedPassword);
 
                                 if($sql->execute()){
 
-                                    $getUser = $cnx->prepare("SELECT * FROM client WHERE email = ?");
-                                    $getUser->bind_param("s",$email);
+                                    $getUser = $cnx->prepare("SELECT * FROM client WHERE email = :email");
+                                    $getUser->bindParam(':email', $email);
                                     if($getUser->execute()){
                                         session_start();
-                                        $result = $getUser->get_result();
-                                        $user = $result->fetch_assoc();
+                                        $user = $getUser->fetch(PDO::FETCH_ASSOC);
                                         $_SESSION['id'] = $user['ID_user'];
                                         echo '<script>document.getElementById("success").style.display = "flex";
                                         setTimeout(()=>{
                                         document.getElementById("success").style.display = "none";
-                                        location.replace("../pages/menu.php");
+                                        location.replace("../pages/activities.php");
                                             },1000)
                                         </script>';
                                     }else{
@@ -170,8 +165,6 @@
 
         let getFName = formElements['firstname'];
         let getLName = formElements['lastname'];
-        let getAddress = formElements['address'];
-        let getPhone = formElements['phone'];
         let getEmail = formElements['email'];
         let getPassword = formElements['password'];
         let getConfirmpassword = formElements['confirmpassword'];
@@ -179,8 +172,6 @@
         
         getFName.style.border = "1px solid #d1d5db";
         getLName.style.border = "1px solid #d1d5db";
-        getAddress.style.border = "1px solid #d1d5db";
-        getPhone.style.border = "1px solid #d1d5db";
         getEmail.style.border = "1px solid #d1d5db";
         getPassword.style.border = "1px solid #d1d5db";
         getConfirmpassword.style.border = "1px solid #d1d5db";
@@ -191,13 +182,7 @@
         } else if (!name.test(getLName.value)) {
             event.preventDefault();
             getLName.style.border = "2px solid red";
-        } else if (!address.test(getAddress.value)) {
-            event.preventDefault();
-            getAddress.style.border = "2px solid red";
-        } else if (!phone.test(getPhone.value)) {
-            event.preventDefault();
-            getPhone.style.border = "2px solid red";
-        } else if (!email.test(getEmail.value)) {
+        }else if (!email.test(getEmail.value)) {
             event.preventDefault();
             getEmail.style.border = "2px solid red";
         } else if (!password.test(getPassword.value)) {
