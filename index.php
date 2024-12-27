@@ -1,3 +1,7 @@
+<?php
+// Include the database connection
+include 'database.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,41 +41,45 @@
         </div>
     </section>
     
+    <?php
+// Fetch top 3 cheapest activities
+$query = "SELECT * FROM activite ORDER BY prix ASC LIMIT 3";
+$result = $cnx->query($query);
+?>
     <section id="bestTrips" class="bestTrips min-h-[60vh]">
-        <div class="title h-[40px] w-full flex justify-center items-center"><h2 class="text-4xl font-bold text-textSpecial">Best Trip Plans</h2></div>
-        <div class="cardsSection py-20 flex flex-wrap justify-center gap-20">
-            <div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">
-                <div class="h-auto max-h-[50%] w-full">
-                    <img class="min-w-full max-h-full" src="img/Thailand aesthetics ___ _ _ Have the trip of a… 1-1.svg" alt="">
-                </div>
-                <div class="min-h-[50%] w-full flex flex-col justify-evenly gap-2 p-2">
-                    <h2 class="text-lg">Experience the Magic of Santorini</h2>
-                    <p class="text-sm">Santorini’s iconic views and sunsets offer the perfect escape Santorini’s iconic views and sunsets offer the perfect escape ...</p>
-                    <div class="w-full flex flex-col items-center gap-2"><a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="#">Learn More</a><h6>(152) orders</h6></div>
-                </div>
-            </div>
-            <div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">
-                <div class="h-auto max-h-[50%] w-full">
-                    <img class="min-w-full max-h-full" src="img/Thailand aesthetics ___ _ _ Have the trip of a… 1-1.svg" alt="">
-                </div>
-                <div class="min-h-[50%] w-full flex flex-col justify-evenly gap-2 p-2">
-                    <h2 class="text-lg">Experience the Magic of Santorini</h2>
-                    <p class="text-sm">Santorini’s iconic views and sunsets offer the perfect escape Santorini’s iconic views and sunsets offer the perfect escape ...</p>
-                    <div class="w-full flex flex-col items-center gap-2"><a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="#">Learn More</a><h6>(152) orders</h6></div>
-                </div>
-            </div>
-            <div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">
-                <div class="h-auto max-h-[50%] w-full">
-                    <img class="min-w-full max-h-full" src="img/Thailand aesthetics ___ _ _ Have the trip of a… 1-1.svg" alt="">
-                </div>
-                <div class="min-h-[50%] w-full flex flex-col justify-evenly gap-2 p-2">
-                    <h2 class="text-lg">Experience the Magic of Santorini</h2>
-                    <p class="text-sm">Santorini’s iconic views and sunsets offer the perfect escape Santorini’s iconic views and sunsets offer the perfect escape ...</p>
-                    <div class="w-full flex flex-col items-center gap-2"><a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="#">Learn More</a><h6>(152) orders</h6></div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="title h-[40px] w-full flex justify-center items-center">
+        <h2 class="text-4xl font-bold text-textSpecial">Cheapest Trip Plans</h2>
+    </div>
+    <div class="cardsSection py-20 flex flex-wrap justify-center gap-20">
+        <?php
+        if ($result) {
+            if ($result->rowCount() > 0) {
+                while ($activity = $result->fetch(PDO::FETCH_ASSOC)) {
+                    echo '<div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">';
+                    echo '<div class="h-auto max-h-[50%] w-full">';
+                    echo '<img class="min-w-full max-h-full" src="img/default.jpg" alt="' . htmlspecialchars($activity['titre']) . '">';
+                    echo '</div>';
+                    echo '<div class="min-h-[50%] w-full flex flex-col justify-evenly gap-2 p-2">';
+                    echo '<h2 class="text-lg">' . htmlspecialchars($activity['titre']) . '</h2>';
+                    echo '<p class="text-sm">' . htmlspecialchars($activity['description']) . '</p>';
+                    echo '<p class="text-lg font-bold text-textSpecial">' . htmlspecialchars($activity['prix']) . ' USD</p>';
+                    echo '<div class="w-full flex flex-col items-center gap-2">';
+                    echo '<a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="#">Learn More</a>';
+                    echo '<h6>(' . htmlspecialchars($activity['places_disponibles']) . ') orders</h6>';
+                    echo '</div>';
+                    echo '</div>';
+                    echo '</div>';
+                }
+            } else {
+                echo '<p>No activities available.</p>';
+            }
+        } else {
+            echo '<p>Error fetching activities.</p>';
+        }
+        ?>
+    </div>
+</section>
+
 
     <section id="about" class="about w-full min-h-[60vh] px-40 max-xl:px-20 max-lg:px-0">
 
