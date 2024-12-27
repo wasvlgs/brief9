@@ -57,8 +57,6 @@ The project is organized as follows:
 
 Diagramme UML: https://lucid.app/lucidchart/e901b33a-82ac-4005-affe-a8198751dabc/edit?viewport_loc=-806%2C-254%2C2639%2C1148%2C0_0&invitationId=inv_fccbc2c9-9155-4b8d-a1fd-c6f3dcb35882
 
-Diagramme de classes: https://lucid.app/lucidchart/afc02e24-c138-4aab-9883-09aa2c8da471/edit?viewport_loc=-498%2C-279%2C3439%2C1496%2CHWEp-vi-RSFO&invitationId=inv_ff80243e-6f81-4028-a368-2e0eac8dd993
-
 documentation links:
 - https://www.youtube.com/watch?v=PKbVJFaXZQA&list=PLeeuvNW2FHViGGhcU0Q-6jqOJeizLiql3
 - https://www.w3schools.com/php/php_oop_classes_objects.asp
