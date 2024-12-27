@@ -1,12 +1,4 @@
-<?php
 
-
-
-    require_once '../database.php';
-
-
-
-?>
 
 
 
@@ -31,10 +23,10 @@
 </div>
 
 <body class="bg-gray-50 text-gray-800">
-    <!-- Sign Up Page Container -->
+
     <div class="flex items-center justify-center min-h-screen bg-gray-100 py-10">
         <div class="w-full max-w-md bg-white rounded-lg shadow-md p-8">
-            <!-- Logo or Title -->
+
             <div class="text-center mb-6">
                 <h1 class="text-2xl font-bold text-gray-900">Sign up</h1>
                 <p class="text-gray-500">Create your account</p>
@@ -78,72 +70,30 @@
 
             <?php
 
-
-                if(isset($_POST['submit'])){
-                    $FName = htmlspecialchars($_POST['firstname']);
-                    $LName = htmlspecialchars($_POST['lastname']);
+                session_start();
+                
+                require_once '../database.php';
+                require_once '../classes/user.php';
+                
+                $db = new Database();
+                $cnx = $db->getConnection();
+                $user = new User($cnx);
+                
+                if (isset($_POST['submit'])) {
+                    $fname = htmlspecialchars($_POST['firstname']);
+                    $lname = htmlspecialchars($_POST['lastname']);
                     $email = htmlspecialchars($_POST['email']);
                     $password = htmlspecialchars($_POST['password']);
-                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    // $cPassword = $_POST['confirmpassword'];
-                    if($cnx){
-                        $checkEmail = $cnx->prepare("SELECT * FROM client");
-                        $answer = true;
-                        if($checkEmail->execute()){
-                            
-                            foreach($checkEmail as $user){
-
-                                if($user['email'] == $email){
-                                    $answer = false;
-                                }
-                            }
-                            if($answer === true){
-                                $sql = $cnx->prepare("INSERT INTO client(nom,prenom,email,password,role,status) VALUES(:fname, :lname, :email, :pass, 'client', 'active')");
-
-                                $sql->bindParam(':fname', $FName);
-                                $sql->bindParam(':lname', $LName);
-                                $sql->bindParam(':email', $email);
-                                $sql->bindParam(':pass', $hashedPassword);
-
-                                if($sql->execute()){
-
-                                    $getUser = $cnx->prepare("SELECT * FROM client WHERE email = :email");
-                                    $getUser->bindParam(':email', $email);
-                                    if($getUser->execute()){
-                                        session_start();
-                                        $user = $getUser->fetch(PDO::FETCH_ASSOC);
-                                        $_SESSION['id'] = $user['ID_user'];
-                                        echo '<script>document.getElementById("success").style.display = "flex";
-                                        setTimeout(()=>{
-                                        document.getElementById("success").style.display = "none";
-                                        location.replace("../pages/activities.php");
-                                            },1000)
-                                        </script>';
-                                    }else{
-                                        session_destroy();
-                                    }
-                                    
-                                }else{
-                                    echo '<script>document.getElementById("error").style.display = "flex";
-                                    setTimeout(()=>{
-                                        document.getElementById("error").style.display = "none";
-                                    },1000)
-                                    </script>';
-                                    session_destroy();
-                                }
-                            }else{
-                                echo '<script>
-                                    document.getElementById("email").style.border = "2px solid red";
-                                </script>';
-                            }
-                        }
-                        
-
-                        
-                        
+                
+                    if ($user->signup($fname, $lname, $email, $password)) {
+                        echo '<script>document.getElementById("success").style.display = "flex";
+                        setTimeout(()=>{document.getElementById("success").style.display = "none"; location.replace("../pages/activities.php");}, 1000)</script>';
+                    } else {
+                        echo '<script>document.getElementById("error").style.display = "flex";
+                        setTimeout(()=>{document.getElementById("error").style.display = "none";}, 1000)</script>';
                     }
                 }
-
+                
 
 
             ?>

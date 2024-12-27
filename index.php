@@ -1,3 +1,18 @@
+<?php
+
+require 'database.php';
+require 'classes/activitie.php';
+require 'classes/reservation.php';
+require 'classes/user.php';
+
+$db = new Database();
+$cnx = $db->getConnection();
+
+$query = "SELECT * FROM activite ORDER BY prix ASC LIMIT 3";
+$result = $cnx->query($query);
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +24,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body class="w-full h-full bg-[#EDEDED]">
-
 
     <header class="h-[75px] w-full bg-white flex items-center justify-between px-20 max-sm:px-5">
         <a href="index.php"><img src="img/Group 1.svg" alt="Logo"></a>
@@ -24,52 +38,47 @@
         </ul>
     </header>
 
-    
     <section class="w-full h-[calc(100vh-75px)] flex">
         <div class="homeContent h-full w-1/2 flex flex-col justify-center pl-20 gap-5 max-lg:w-full max-lg:items-center max-lg:pl-0">
             <h5 class="text-lg font-semibold">welcome to,</h5>
             <h1 class="text-5xl font-bold max-sm:text-3xl"><span>VG</span> travel platform!</h1>
             <p class="text-base text-[#505050] max-lg:text-center max-lg:px-[10vw]">Plan your trips effortlessly with us. Explore exclusive deals on flights, hotels, and tours, and customize your travel experience in just a few clicks.</p>
-            <a class="w-[200px] h-[50px] rounded-[5px] flex justify-center items-center bg-white border-[3px] border-textSpecial mt-10 text-textSpecial hover:bg-textSpecial hover:text-white transition-all duration-200" href="pages/activities.php">Get your trip now!</a>
+            <a class="w-[200px] h-[50px] rounded-[5px] flex justify-center items-center bg-white border-[3px] border-textSpecial mt-10 text-textSpecial hover:bg-textSpecial hover:text-white transition-all duration-200" href="login/login.php">Get your trip now!</a>
         </div>
         <div class="homePicture w-1/2 h-full flex justify-center items-center max-lg:hidden">
             <img class="w-[30vw]" src="img/plane ticket.svg" alt="Plan ticket">
         </div>
     </section>
-    
+
     <section id="bestTrips" class="bestTrips min-h-[60vh]">
-        <div class="title h-[40px] w-full flex justify-center items-center"><h2 class="text-4xl font-bold text-textSpecial">Best Trip Plans</h2></div>
+        <div class="title h-[40px] w-full flex justify-center items-center">
+            <h2 class="text-4xl font-bold text-textSpecial">Cheapest Trip Plans</h2>
+        </div>
         <div class="cardsSection py-20 flex flex-wrap justify-center gap-20">
-            <div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">
+            <?php
+            if ($result) {
+                if ($result->rowCount() > 0) {
+                    while ($activity = $result->fetch(PDO::FETCH_ASSOC)) {
+                        echo '<div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">
                 <div class="h-auto max-h-[50%] w-full">
-                    <img class="min-w-full max-h-full" src="img/Thailand aesthetics ___ _ _ Have the trip of a… 1-1.svg" alt="">
+                    <img class="min-w-full max-h-full" src="img/Thailand aesthetics ___ _ _ Have the trip of a… 1-1.svg" alt="'.$activity['titre'].'">
                 </div>
                 <div class="min-h-[50%] w-full flex flex-col justify-evenly gap-2 p-2">
-                    <h2 class="text-lg">Experience the Magic of Santorini</h2>
-                    <p class="text-sm">Santorini’s iconic views and sunsets offer the perfect escape Santorini’s iconic views and sunsets offer the perfect escape ...</p>
-                    <div class="w-full flex flex-col items-center gap-2"><a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="#">Learn More</a><h6>(152) orders</h6></div>
+                    <h2 class="text-lg">'.$activity['titre'].'</h2>
+                    <p class="text-sm">'.$activity['description'].'</p>
+                    <h5>$'.$activity['prix'].'</h5>
+                    <div class="w-full flex flex-col items-center gap-2"><a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="login/signup.php">Learn More</a></div>
                 </div>
-            </div>
-            <div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">
-                <div class="h-auto max-h-[50%] w-full">
-                    <img class="min-w-full max-h-full" src="img/Thailand aesthetics ___ _ _ Have the trip of a… 1-1.svg" alt="">
-                </div>
-                <div class="min-h-[50%] w-full flex flex-col justify-evenly gap-2 p-2">
-                    <h2 class="text-lg">Experience the Magic of Santorini</h2>
-                    <p class="text-sm">Santorini’s iconic views and sunsets offer the perfect escape Santorini’s iconic views and sunsets offer the perfect escape ...</p>
-                    <div class="w-full flex flex-col items-center gap-2"><a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="#">Learn More</a><h6>(152) orders</h6></div>
-                </div>
-            </div>
-            <div class="card w-full max-w-[300px] min-h-[500px] bg-white hover:translate-y-[-5px] hover:scale-105">
-                <div class="h-auto max-h-[50%] w-full">
-                    <img class="min-w-full max-h-full" src="img/Thailand aesthetics ___ _ _ Have the trip of a… 1-1.svg" alt="">
-                </div>
-                <div class="min-h-[50%] w-full flex flex-col justify-evenly gap-2 p-2">
-                    <h2 class="text-lg">Experience the Magic of Santorini</h2>
-                    <p class="text-sm">Santorini’s iconic views and sunsets offer the perfect escape Santorini’s iconic views and sunsets offer the perfect escape ...</p>
-                    <div class="w-full flex flex-col items-center gap-2"><a class="h-[40px] w-[180px] bg-textSpecial flex justify-center items-center text-white" href="#">Learn More</a><h6>(152) orders</h6></div>
-                </div>
-            </div>
+            </div>';
+                        
+                    }
+                } else {
+                    echo '<p>No activities available.</p>';
+                }
+            } else {
+                echo '<p>Error fetching activities.</p>';
+            }
+            ?>
         </div>
     </section>
 
